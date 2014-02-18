@@ -21,6 +21,7 @@ class Better_Datelines {
         add_action( 'post_submitbox_misc_actions', array( $this, 'dateline_text' ) );
         add_action( 'save_post', array( $this, 'save_meta' ) );
         add_filter( 'the_content', array( $this, 'prepend_the_content_with_dateline' ) );
+        add_shortcode('better-dateline', array( $this, 'shortcode_callback' ) );
     }
 
     /**
@@ -67,6 +68,21 @@ class Better_Datelines {
 
         // Filter: better_datelines_formatted_content( $formatted_content, $dateline, $original_content )
         return apply_filters( 'better_datelines_formatted_content', $formatted_content, $dateline, $content );
+    }
+
+    /**
+     * Basic shortcode callback [better-dateline]
+     * @param  array  $atts [description]
+     * @return [type]       [description]
+     */
+    function shortcode_callback( $atts = array() ) {
+        $atts = shortcode_atts( array(
+            'before' => '',
+            'after' => ' &mdash; ',
+        ), $atts );
+        $dateline = get_post_meta( get_the_id(), self::META_KEY, true );
+        if ( $dateline )
+            return sprintf( "%s %s %s", esc_html( $atts['before'] ), esc_html( $dateline ), esc_html( $atts['after'] ) );
     }
 }
 
