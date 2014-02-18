@@ -9,15 +9,24 @@
  */
 
 /**
- * Most of the code was stolen from "Hidden Posts" plugin by Automattic
+ * Some of the code was stolen from "Hidden Posts" plugin by Automattic:
+ *
+ * @see https://github.com/Automattic/hidden-posts
  *
  */
 class Better_Datelines {
 
     const META_KEY = 'better-dateline';
     const NONCE_KEY = 'better-dateline-nonce';
+    const PER_POST_SETTING_KEY = 'better-dateline-hide';
+
+    public $should_auto_prepend;
 
     function __construct() {
+
+        // Whether autoprepend the content
+        $this->should_auto_prepend = apply_filters( 'better_datelines_prepend_the_content', false ) ;
+
         add_action( 'post_submitbox_misc_actions', array( $this, 'dateline_text' ) );
         add_action( 'save_post', array( $this, 'save_meta' ) );
         add_filter( 'the_content', array( $this, 'prepend_the_content_with_dateline' ) );
@@ -32,6 +41,13 @@ class Better_Datelines {
         $dateline = get_post_meta( $post->ID, self::META_KEY, true );
         wp_nonce_field( self::NONCE_KEY, self::NONCE_KEY );
         printf( '<div id="better-dateline-box" class="misc-pub-section"><label><b>Dateline</b></label><br/><textarea name="%s">%s</textarea></div>', self::META_KEY, esc_html( $dateline ) );
+
+        // If datelines are automatically prependend to the_content - allow to disable dateline via UI on per post basis
+        if ( $this->should_auto_prepend ) {
+            $checked = get_post_meta( $post->ID, self::PER_POST_SETTING_KEY, true ) ? true : false;
+            printf( '<div id="better-dateline-checkbox" class="misc-pub-section"><label><input type="checkbox" name="%s" %s> Hide Dateline</label></div>', self::PER_POST_SETTING_KEY, checked( $checked, true, false ) );
+        }
+
     }
 
     /**
@@ -44,9 +60,12 @@ class Better_Datelines {
 
         // Update the post array if necessary
         if ( isset( $_POST[ self::META_KEY ] ) ) {
-
             update_post_meta( $post, self::META_KEY, sanitize_text_field( $_POST[ self::META_KEY] ) );
         }
+
+        $should_hide = isset( $_POST[ self::PER_POST_SETTING_KEY ] ) ? true : false;
+        // Update the post array if necessary
+        update_post_meta( $post, self::PER_POST_SETTING_KEY, $should_hide );
     }
 
     /**
@@ -56,11 +75,13 @@ class Better_Datelines {
      */
     function prepend_the_content_with_dateline( $content ) {
         // By default content is not prepended with dateline unless you explicitly set better_datelines_prepend_the_content filter to return true
-        if ( false === apply_filters( 'better_datelines_prepend_the_content', false ) )
+        $should_hide = (bool) get_post_meta( get_the_id(), self::PER_POST_SETTING_KEY, true );
+        if ( false === $this->should_auto_prepend || $should_hide )
             return $content;
 
         // Bail if there's no dateline
         $dateline = get_post_meta( get_the_id(), self::META_KEY, true );
+
         if ( ! $dateline )
             return $content;
         // Default format
