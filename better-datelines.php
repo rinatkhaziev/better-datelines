@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Better Datelines
- * Description: Use meta field to store dateline so that they don't get included
+ * Description: Use meta field to store dateline so that datelines aren't included in autoexcerpts and the_content as well
  * Version:     0.1
  * Author:      Doejo
  * Author URI:  http://doejo.com
