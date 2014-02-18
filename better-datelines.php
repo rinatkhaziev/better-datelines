@@ -23,10 +23,13 @@ class Better_Datelines {
     public $should_auto_prepend;
 
     function __construct() {
+        add_action( 'init', array( $this, 'action_init' ) );
+    }
 
+
+    function action_init() {
         // Whether autoprepend the content
-        $this->should_auto_prepend = apply_filters( 'better_datelines_prepend_the_content', false ) ;
-
+        $this->should_auto_prepend = apply_filters( 'better_datelines_prepend_the_content', false );
         add_action( 'post_submitbox_misc_actions', array( $this, 'dateline_text' ) );
         add_action( 'save_post', array( $this, 'save_meta' ) );
         add_filter( 'the_content', array( $this, 'prepend_the_content_with_dateline' ) );
