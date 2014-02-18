@@ -45,12 +45,6 @@ class Better_Datelines {
         wp_nonce_field( self::NONCE_KEY, self::NONCE_KEY );
         printf( '<div id="better-dateline-box" class="misc-pub-section"><label><b>Dateline</b></label><br/><textarea name="%s" style="width: 100%%">%s</textarea></div>', self::META_KEY, esc_html( $dateline ) );
 
-        // If datelines are automatically prependend to the_content - allow to disable dateline via UI on per post basis
-        if ( $this->should_auto_prepend ) {
-            $checked = get_post_meta( $post->ID, self::PER_POST_SETTING_KEY, true ) ? true : false;
-            printf( '<div id="better-dateline-checkbox" class="misc-pub-section"><label><input type="checkbox" name="%s" %s> Hide Dateline</label></div>', self::PER_POST_SETTING_KEY, checked( $checked, true, false ) );
-        }
-
     }
 
     /**
@@ -65,10 +59,6 @@ class Better_Datelines {
         if ( isset( $_POST[ self::META_KEY ] ) ) {
             update_post_meta( $post, self::META_KEY, sanitize_text_field( $_POST[ self::META_KEY] ) );
         }
-
-        $should_hide = isset( $_POST[ self::PER_POST_SETTING_KEY ] ) ? true : false;
-        // Update the post array if necessary
-        update_post_meta( $post, self::PER_POST_SETTING_KEY, $should_hide );
     }
 
     /**
@@ -78,12 +68,11 @@ class Better_Datelines {
      */
     function prepend_the_content_with_dateline( $content ) {
         // By default content is not prepended with dateline unless you explicitly set better_datelines_prepend_the_content filter to return true
-        $should_hide = (bool) get_post_meta( get_the_id(), self::PER_POST_SETTING_KEY, true );
-        if ( false === $this->should_auto_prepend || $should_hide )
+        if ( false === $this->should_auto_prepend )
             return $content;
 
         // Bail if there's no dateline
-        $dateline = get_post_meta( get_the_id(), self::META_KEY, true );
+        $dateline = trim( get_post_meta( get_the_id(), self::META_KEY, true ) );
 
         if ( ! $dateline )
             return $content;
