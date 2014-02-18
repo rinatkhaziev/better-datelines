@@ -40,7 +40,7 @@ class Better_Datelines {
         global $post;
         $dateline = get_post_meta( $post->ID, self::META_KEY, true );
         wp_nonce_field( self::NONCE_KEY, self::NONCE_KEY );
-        printf( '<div id="better-dateline-box" class="misc-pub-section"><label><b>Dateline</b></label><br/><textarea name="%s">%s</textarea></div>', self::META_KEY, esc_html( $dateline ) );
+        printf( '<div id="better-dateline-box" class="misc-pub-section"><label><b>Dateline</b></label><br/><textarea name="%s" style="width: 100%%">%s</textarea></div>', self::META_KEY, esc_html( $dateline ) );
 
         // If datelines are automatically prependend to the_content - allow to disable dateline via UI on per post basis
         if ( $this->should_auto_prepend ) {
