@@ -41,6 +41,10 @@ function my_better_datelines_formatted_content( $formatted_content, $dateline, $
 	return $formatted_content;
 }`
 
+== Screenshots ==
+
+1. Screenshot of edit post screen with a dateline
+1. Screenshot of a post with a dateline
 
 == Changelog ==
 
