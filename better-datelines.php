@@ -76,11 +76,12 @@ class Better_Datelines {
 
         if ( ! $dateline )
             return $content;
-        // Default format
-        $formatted_content = sprintf( "%s &mdash; %s", esc_html( $dateline ), $content );
+
+        // Account for wpautop filter, ensuring that the dateline is in the same paragraph as the actual content
+        $autop = preg_replace( '/^\<p\>/i', "<p>" . sprintf( "%s &mdash; ", esc_html( $dateline ) ), $content );
 
         // Filter: better_datelines_formatted_content( $formatted_content, $dateline, $original_content )
-        return apply_filters( 'better_datelines_formatted_content', $formatted_content, $dateline, $content );
+        return apply_filters( 'better_datelines_formatted_content', $autop, $dateline, $content );
     }
 
     /**
