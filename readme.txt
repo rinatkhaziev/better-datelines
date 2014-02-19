@@ -2,23 +2,26 @@
 Contributors: doejo, rinatkhaziev
 Requires at least: 3.6
 Tested up to: 3.8
+Tags: editorial, dateline, news, excerpt, content
 Stable tag: 0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Dateline plugin for news publications
+Lightweight plugin for better dateline management for news sites. Store dateline as a custom meta field instead of putting it in the post content.
 
 == Description ==
 
-Store dateline as meta field and prepend it to content automatically.
+A dateline is a brief piece of text included in news articles that describes where and when the story occurred, or was written or filed, though the date is often omitted. This plugin gives you ability to store datelines as a meta field so you don't have to include them in your post body.
+
+You can use either [better-dateline] shortcode to insert dateline manually or automatically prepend post content with a dateline. (See Frequently Asked Questions)
 
 If you'd like to check out the code and contribute, [join us on GitHub](https://github.com/rinatkhaziev/better-datelines/). Pull requests, issues, and plugin recommendations are more than welcome!
 
 == Installation ==
 
-1. Upload the `better-datelines` folder to your plugins directory (e.g. `/wp-content/plugins/`)
-2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Hide posts from the post edit screen
+1. Upload the `better-datelines` folder to your plugins directory (e.g. `/wp-content/plugins/`).
+2. Activate the plugin through the 'Plugins' menu in WordPress.
+3. You'll see a dateline textarea on post edit screen.
 
 == Frequently Asked Questions ==
 
